@@ -6,7 +6,7 @@ import cors from "cors";
 import clerkWebhookRouter from './routes/Register';
 import monitorRoute  from "./routes/Monitor";
 
-import pingRouter from "./utils/ping.job";
+
 
 const app = express();
 dotenv.config();
@@ -33,10 +33,9 @@ app.get('/', (req, res) => {
   res.send("hello")
  return;
 });
-//@ts-ignore
-app.use(pingRouter)
-app.use('/monitor',monitorRoute)
 
+
+app.use('/monitor',monitorRoute)
 
 app.listen(process.env.PORT, async () => {
   console.log(`Server running on port ${process.env.PORT || 3000}`);
