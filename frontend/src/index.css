@@ -10,7 +10,21 @@
     --angle: 360deg;
   }
 }
-
+html, body, #root {
+  height: 100%;
+}
 .animate-border {
   animation: border-spin 3s linear infinite;
+}
+
+.backdrop-blur-lg {
+  backdrop-filter: blur(12px);
+}
+
+.border-white\/10 {
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+.hover\:bg-white\/10:hover {
+  background-color: rgba(255, 255, 255, 0.1);
 }
