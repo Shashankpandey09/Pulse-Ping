@@ -1,0 +1,16 @@
+@import "tailwindcss";
+@property --angle {
+  syntax: '<angle>';
+  initial-value: 0deg;
+  inherits: false;
+}
+
+@keyframes border-spin {
+  to {
+    --angle: 360deg;
+  }
+}
+
+.animate-border {
+  animation: border-spin 3s linear infinite;
+}

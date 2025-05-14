@@ -103,6 +103,11 @@ try {
 //getting all the monitors for the user
 const monitors =await prisma.monitor.findMany({
  where:{userId:userId},
+ orderBy:{createdAt:"desc"},
+ include:{history:{
+  orderBy:{lastPing:'desc'}
+ }},
+ 
 })
 if(!monitors){
  res.status(404).json({message:'not found'})
@@ -126,6 +131,7 @@ monitorRoute.get('/history/:id',async(req,res)=>{
       res.status(404).json({message:"Not Found"});
       return;
     }
+    res.status(200).json({message:monitorHistory})
   } catch (error) {
     res.status(500).json({message:error})
   }
