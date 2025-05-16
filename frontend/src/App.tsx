@@ -4,6 +4,8 @@ import Landing from "./Pages/LandingPage";
 import Dashboard from "./Pages/Dashboard";
 import ProtectedRoute from "./Components/ProtectedRoute";
 import './index.css'
+import AddMonitor from "./Pages/Form";
+import Monitors from "./Pages/Monitors";
 export default function App() {
   return (
     <BrowserRouter>
@@ -17,6 +19,12 @@ export default function App() {
           </ProtectedRoute>
         }
       />
+      <Route path="/addMonitor" element={<ProtectedRoute>
+        <AddMonitor/>
+      </ProtectedRoute>}/>
+      <Route path="/Monitors" element={<ProtectedRoute>
+       <Monitors/>
+      </ProtectedRoute>}/>
     </Routes>
     </BrowserRouter>
   );

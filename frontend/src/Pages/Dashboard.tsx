@@ -47,13 +47,9 @@ const Dashboard: React.FC = () => {
   }, [monitor]);
 
   const recentIncidents = useMemo(() => {
-    const downMonitors = monitor
-      .filter(m => m.history.some(entry => entry.lastStatus === 'down'))
-      .sort((a, b) => {
-        const aLast = a.history.length > 0 ? a.history[a.history.length - 1].lastPing?.getTime() ?? 0 : 0;
-        const bLast = b.history.length > 0 ? b.history[b.history.length - 1].lastPing?.getTime() ?? 0 : 0;
-        return bLast - aLast;
-      });
+  const downMonitors = monitor
+  .filter(m => m.history.some(entry => entry.lastStatus === 'down'))
+  .slice(0, 3);
 
     return downMonitors.slice(0, 3);
   }, [monitor]);
@@ -142,7 +138,7 @@ const Dashboard: React.FC = () => {
               </div>
             </div>
 
-            {/* Recent Incidents */}
+            
             {recentIncidents.length > 0 && (
               <div className="shadow-lg p-6">
                 <div className="flex items-center justify-between bg-gradient-to-b from-[#0f0f0f] to-[#1a1a1a] mb-4">
@@ -171,7 +167,7 @@ const Dashboard: React.FC = () => {
             )}
           </div>
 
-          {/* Latest Monitors */}
+         
           <div>
             <div className="bg-gradient-to-b from-[#0f0f0f] to-[#3b3b3b] rounded-2xl shadow-lg p-6">
               <h3 className="text-xl font-semibold mb-4 text-white dark:text-white">

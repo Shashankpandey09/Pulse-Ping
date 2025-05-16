@@ -1,6 +1,9 @@
 import { FiHome, FiPlus, FiMonitor } from 'react-icons/fi';
+import { useNavigate } from 'react-router-dom';
+
 
 export default function Sidebar() {
+  const navigate=useNavigate()
   return (
     <div className={`fixed z-50
     
@@ -17,17 +20,17 @@ export default function Sidebar() {
       <div className="flex flex-col items-center space-y-3 p-2
                      max-md:flex-row max-md:space-y-0 max-md:space-x-2">
         {/* Home Button */}
-        <button className="p-2 cursor-pointer hover:bg-white/10 rounded-full transition-colors duration-200">
+        <button  onClick={()=>navigate('/dashboard')} className="p-2 cursor-pointer hover:bg-white/10 rounded-full transition-colors duration-200">
           <FiHome className="h-6 w-6 text-gray-300" />
         </button>
 
         {/* Plus Button */}
-        <button className="p-2 cursor-pointer hover:bg-white/10 rounded-full transition-colors duration-200">
+        <button onClick={()=>navigate('/addMonitor')}  className="p-2 cursor-pointer hover:bg-white/10 rounded-full transition-colors duration-200">
           <FiPlus className="h-6 w-6 text-gray-300" />
         </button>
 
         {/* Monitor Button */}
-        <button className="p-2 cursor-pointer hover:bg-white/10 rounded-full transition-colors duration-200">
+        <button onClick={()=>navigate('/Monitors')} className="p-2 cursor-pointer hover:bg-white/10 rounded-full transition-colors duration-200">
           <FiMonitor className="h-6 w-6 text-gray-300" />
         </button>
       </div>

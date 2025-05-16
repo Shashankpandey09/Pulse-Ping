@@ -1,13 +1,16 @@
 import { SignInButton,  useUser, UserButton } from '@clerk/clerk-react';
 
 export default function Header() {
-  const { isSignedIn } = useUser();
+  const { isSignedIn,user } = useUser();
 
   return (
     <header style={{ display: 'flex', justifyContent: 'flex-end', gap: '1rem' }}>
       {isSignedIn ? (
         <>
+        <div className='flex gap-2'>
+          <h1>{user.firstName}</h1>
           <UserButton />
+          </div>
       
         </>
       ) : (
