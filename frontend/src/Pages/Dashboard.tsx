@@ -6,18 +6,21 @@ import { StatusItem } from '../Components/StatusItem';
 import { useMonitor } from '../Store/MonitorStore';
 import Nav from '../Components/Nav';
 import Sidebar from '../Components/Sidebar';
+import { useAuth } from '@clerk/clerk-react';
 
 const Dashboard: React.FC = () => {
-  const { getMonitors, monitor } = useMonitor();
+  const { getMonitors, monitors } = useMonitor();
+  const {getToken}=useAuth();
+  const token=getToken();
 
   const stats = useMemo(() => {
-    const totalMonitors = monitor.length;
-    const upMonitors = monitor.filter(m => m.currentStatus === 'up').length;
-    const downMonitors = monitor.filter(m => m.currentStatus === 'down').length;
-    const pendingMonitors = monitor.filter(m => m.currentStatus === 'pending').length;
+    const totalMonitors = monitors.length;
+    const upMonitors = monitors.filter(m => m.currentStatus === 'up').length;
+    const downMonitors = monitors.filter(m => m.currentStatus === 'down').length;
+    const pendingMonitors = monitors.filter(m => m.currentStatus === 'pending').length;
 
-    const totalChecks = monitor.reduce((sum, m) => sum + m.history.length, 0);
-    const upChecks = monitor.reduce(
+    const totalChecks = monitors.reduce((sum, m) => sum + m.history.length, 0);
+    const upChecks = monitors.reduce(
       (sum, m) => sum + m.history.filter(h => h.lastStatus === 'up').length,
       0
     );
@@ -26,7 +29,7 @@ const Dashboard: React.FC = () => {
       ? (upChecks / totalChecks * 100).toFixed(2)
       : '0.00';
 
-    const responseTimes = monitor.flatMap(m =>
+    const responseTimes = monitors.flatMap(m =>
       m.history
         .filter(h => m.currentStatus === 'up' && h.responseTime !== null)
         .map(h => h.responseTime as number)
@@ -44,15 +47,15 @@ const Dashboard: React.FC = () => {
       uptimePercentage,
       avgResponseTime
     };
-  }, [monitor]);
+  }, [monitors]);
 
   const recentIncidents = useMemo(() => {
-  const downMonitors = monitor
+  const downMonitors = monitors
   .filter(m => m.history.some(entry => entry.lastStatus === 'down'))
   .slice(0, 3);
 
     return downMonitors.slice(0, 3);
-  }, [monitor]);
+  }, [monitors]);
 
   return (
     <div className="relative min-h-screen  bg-gradient-to-b from-[#0f0f0f] to-[#1a1a1a] text-white">
@@ -146,7 +149,7 @@ const Dashboard: React.FC = () => {
                     Recent Incidents
                   </h3>
                   <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300">
-                    {recentIncidents.length} {recentIncidents.length === 1 ? 'monitor' : 'monitors'}
+                    {recentIncidents.length} {recentIncidents.length === 1 ? 'monitors' : 'monitors'}
                   </span>
                 </div>
 
@@ -174,13 +177,13 @@ const Dashboard: React.FC = () => {
                 Latest Monitors
               </h3>
 
-              {monitor.length === 0 ? (
+              {monitors.length === 0 ? (
                 <p className="text-green-500 dark:text-gray-300 text-center py-4">
-                  No monitor added yet
+                  No monitors added yet
                 </p>
               ) : (
                 <div className="space-y-4">
-                  {monitor.slice(0, 3).map(m => (
+                  {monitors.slice(0, 3).map(m => (
                     <div key={m.id} className="border-b border-gray-200 dark:border-gray-700 pb-4">
                       <div className="flex justify-between items-center">
                         <div>

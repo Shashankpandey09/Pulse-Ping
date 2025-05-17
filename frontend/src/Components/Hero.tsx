@@ -35,8 +35,8 @@ const Hero = () => {
             </button>
           </Link>
           {!isSignedIn &&  <SignInButton mode="modal">
-            <button className="flex items-center gap-2 border-2 border-white/20 bg-white/5 backdrop-blur-lg px-8 py-4 rounded-xl text-white hover:border-cyan-400 hover:bg-cyan-500/10 transition-all duration-200 group">
-              <span>Sign In</span>
+            <button className="flex cursor-pointer items-center gap-2 border-2 border-white/20 bg-white/5 backdrop-blur-lg px-8 py-4 rounded-xl text-white hover:border-cyan-400 hover:bg-cyan-500/10 transition-all duration-200 group">
+              <span >Sign Up</span>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 className="h-5 w-5 group-hover:translate-x-1 transition-transform"

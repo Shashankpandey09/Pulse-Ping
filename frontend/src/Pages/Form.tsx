@@ -1,8 +1,10 @@
 // src/Pages/AddMonitor.tsx
 import { useState, type ChangeEvent, type FormEvent } from "react";
 import Nav from "../Components/Nav";
-import { div } from "framer-motion/client";
+import { ToastContainer, toast,Bounce } from 'react-toastify';
 import Sidebar from "../Components/Sidebar";
+import { useMonitor } from "../Store/MonitorStore";
+import { useAuth } from "@clerk/clerk-react";
 
 const AddMonitor = () => {
   const [inputValues, setInput] = useState({
@@ -10,7 +12,9 @@ const AddMonitor = () => {
     url: "",
     interval: 59,
   });
-
+   const { getToken } = useAuth(); 
+   
+const {addMonitors,loading}=useMonitor()
   const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setInput((prev) => ({
@@ -19,9 +23,14 @@ const AddMonitor = () => {
     }));
   };
 
-  const handleSubmit = (e: FormEvent) => {
+  const handleSubmit = async(e: FormEvent) => {
     e.preventDefault();
-    console.log(inputValues);
+      const token=await getToken()
+   const added= await addMonitors(inputValues,token as string)
+   if(added){toast('Success')}
+   else{
+    toast("error")
+   }
     setInput({ name: "", url: "", interval: 59 });
   };
 
@@ -92,12 +101,23 @@ const AddMonitor = () => {
 
 
         <div className="flex justify-center pt-2">
-          <button
-            type="submit"
-            className=" cursor-pointer bg-gradient-to-r from-white to-gray-200 text-black font-semibold px-6 py-3 rounded-xl shadow-xl hover:shadow-cyan-400/20 transition-all"
-          >
-            Add Monitor
-          </button>
+        <button
+  type="submit"
+  disabled={loading}
+  className={`flex items-center justify-center gap-2 bg-gradient-to-r from-white to-gray-200 text-black font-semibold px-6 py-3 rounded-xl shadow-xl transition-all ${
+    loading ? 'opacity-50 cursor-not-allowed' : 'hover:shadow-cyan-400/20'
+  }`}
+>
+  {loading ? (
+    <>
+      Adding...
+      <span className="h-4 w-4 border-2 border-t-transparent border-black rounded-full animate-spin"></span>
+    </>
+  ) : (
+    'Add Monitor'
+  )}
+</button>
+         
         </div>
       </form>
 
@@ -111,6 +131,19 @@ const AddMonitor = () => {
         </ul>
       </div>
     </section>
+    <ToastContainer
+position="top-right"
+autoClose={5000}
+hideProgressBar={false}
+newestOnTop={false}
+closeOnClick={false}
+rtl={false}
+pauseOnFocusLoss
+draggable
+pauseOnHover
+theme="dark"
+transition={Bounce}
+/>
     </div>
   );
 };

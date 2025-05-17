@@ -1,6 +1,6 @@
 import {create} from 'zustand'
 import axios from 'axios'
-import { useAuth } from "@clerk/clerk-react";
+
  type Monitor={
       name: string;
     url: string;
@@ -19,33 +19,54 @@ type history={
     lastPing: Date;
     responseTime: number | null;
 }
+type MonitorPost=Pick<Monitor,"name" | "url"| "interval">
 interface MonitorStoreState{
     loading:boolean,
-    monitor:Monitor[]
+    monitors:Monitor[]
     error:string|null
-    getMonitors:()=>Promise<void>
+    getMonitors:(token:string)=>Promise<void>
+    addMonitors:(payload:MonitorPost,token:string)=>Promise<Boolean>
 }
 
 export const useMonitor=create<MonitorStoreState>((set)=>({
     loading:false,
-    monitor:[],
+    monitors:[],
     error:null,
-    getMonitors:async()=>{
+    getMonitors:async(token)=>{
      try {
-        const { getToken } = useAuth(); 
+       
         set({loading:true,error:null})
-        const token=await getToken()
+      
 
-        const resp=await axios.get<Monitor[]>('http://localhost:3000/monitor',{
+        const resp=await axios.get<Monitor[]>(`${import.meta.env.VITE_BACKEND_URL}/monitor`,{
             headers:{
                 "Content-Type":"application/json",
                 "Authorization":`Bearer ${token}`
             }
         })
-        set({loading:false,monitor:resp.data})
+        set({loading:false,monitors:resp.data})
 
      } catch (error) {
         set({loading:false,error:(error) as string})
+     }
+    },
+    addMonitors:async(payload,token)=>{
+     try {
+   
+        
+        set({loading:true});
+        await axios.post(`${import.meta.env.VITE_BACKEND_URL}/monitor/create`,payload,{
+          headers:{
+            "Content-Type":'application/json',
+            "Authorization":`Bearer ${token}`
+          }
+        })
+        set({loading:false}) 
+        return true;
+     } catch (error:any) {
+        set({loading:false,error:error})
+        console.log(error)
+        return false;
      }
     }
 }))
