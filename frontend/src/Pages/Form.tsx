@@ -5,7 +5,7 @@ import { ToastContainer, toast,Bounce } from 'react-toastify';
 import Sidebar from "../Components/Sidebar";
 import { useMonitor } from "../Store/MonitorStore";
 import { useAuth } from "@clerk/clerk-react";
-
+import { useNavigate } from "react-router-dom";
 const AddMonitor = () => {
   const [inputValues, setInput] = useState({
     name: "",
@@ -13,7 +13,7 @@ const AddMonitor = () => {
     interval: 59,
   });
    const { getToken } = useAuth(); 
-   
+   const navigate=useNavigate();
 const {addMonitors,loading}=useMonitor()
   const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
@@ -27,9 +27,13 @@ const {addMonitors,loading}=useMonitor()
     e.preventDefault();
       const token=await getToken()
    const added= await addMonitors(inputValues,token as string)
-   if(added){toast('Success')}
+   if(added){toast('Success')
+    setTimeout(()=>{
+  navigate('/Monitors')
+    },2000)
+   }
    else{
-    toast("error")
+    toast("error maximum monitor limit reached ")
    }
     setInput({ name: "", url: "", interval: 59 });
   };
@@ -110,7 +114,7 @@ const {addMonitors,loading}=useMonitor()
 >
   {loading ? (
     <>
-      Adding...
+      Adding
       <span className="h-4 w-4 border-2 border-t-transparent border-black rounded-full animate-spin"></span>
     </>
   ) : (

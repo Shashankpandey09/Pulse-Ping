@@ -1,15 +1,22 @@
 // src/App.tsx
 import {BrowserRouter, Routes, Route } from "react-router-dom";
-import Landing from "./Pages/LandingPage";
-import Dashboard from "./Pages/Dashboard";
-import ProtectedRoute from "./Components/ProtectedRoute";
 import './index.css'
-import AddMonitor from "./Pages/Form";
-import Monitors from "./Pages/Monitors";
+import { Suspense,lazy } from "react";
+const Landing=lazy(()=>import("./Pages/LandingPage"))
+const Dashboard=lazy(()=>import("./Pages/Dashboard"))
+const ProtectedRoute=lazy(()=>import("./Components/ProtectedRoute"))
+const  AddMonitor=lazy(()=>import("./Pages/Form"))
+const Monitors=lazy(()=>import("./Pages/Monitors"))
+
+
+
+
 export default function App() {
   return (
     <BrowserRouter>
+    <Suspense fallback={<p className="text-white">loading....</p>}>
     <Routes>
+      
       <Route path="/" element={<Landing />} />
       <Route
         path="/dashboard"
@@ -26,6 +33,7 @@ export default function App() {
        <Monitors/>
       </ProtectedRoute>}/>
     </Routes>
+    </Suspense>
     </BrowserRouter>
   );
 }
