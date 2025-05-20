@@ -13,7 +13,7 @@ import { SkeletonDashboard } from '../Components/Skeleton';
 
 const Dashboard: React.FC = () => {
   const { getMonitors, monitor,loading } = useMonitor();
-  const {token,load}=useToken()
+  const {token}=useToken()
 //  const recentIncidents=useGetRecentIncidents()
  const stats=useMonitorStat()
 useEffect(()=>{
@@ -21,7 +21,7 @@ useEffect(()=>{
    getMonitors(token) 
 },[token])
   
- const finalLoading=loading&&load
+ const finalLoading=loading
   
 
   return (
@@ -129,7 +129,7 @@ useEffect(()=>{
                           <h4 className="font-medium text-white ">{m.name}</h4>
                           <p className="text-sm text-gray-200 ">{m.url}</p>
                         </div>
-                        <MonitorStatusBadge status={m.history[0].lastStatus} />
+                        <MonitorStatusBadge status={m.currentStatus} />
                       </div>
                     </div>
                   ))}
@@ -152,7 +152,7 @@ useEffect(()=>{
               ) : (
                 <div className="space-y-4">
                   {monitor?.slice(0, 3).map(m => (
-                    <div key={m.id} className="border-b border-gray-200 pb-4">
+                    <div key={m.id} className="border-b cursor-pointer border-gray-200 pb-4">
                       <div className="flex justify-between items-center">
                         <div>
                           <h4 className="font-medium text-green-500 truncate max-w-[180px]">
@@ -162,7 +162,7 @@ useEffect(()=>{
                             {m.url}
                           </p>
                         </div>
-                        <MonitorStatusBadge status={m.history[0].lastStatus} />
+                        <MonitorStatusBadge status={m.currentStatus} />
                       </div>
 
                       <div className="mt-2 text-sm text-gray-400  flex justify-between">

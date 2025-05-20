@@ -2,6 +2,7 @@
 import {BrowserRouter, Routes, Route } from "react-router-dom";
 import './index.css'
 import { Suspense,lazy } from "react";
+import HistoryGraph from "./Pages/HistoryGraph";
 const Landing=lazy(()=>import("./Pages/LandingPage"))
 const Dashboard=lazy(()=>import("./Pages/Dashboard"))
 const ProtectedRoute=lazy(()=>import("./Components/ProtectedRoute"))
@@ -31,6 +32,9 @@ export default function App() {
       </ProtectedRoute>}/>
       <Route path="/Monitors" element={<ProtectedRoute>
        <Monitors/>
+      </ProtectedRoute>}/>
+       <Route path="/history/:id" element={<ProtectedRoute>
+       <HistoryGraph/>
       </ProtectedRoute>}/>
     </Routes>
     </Suspense>

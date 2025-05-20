@@ -8,7 +8,7 @@ import MonitorCardSkeleton from "../Components/MonitorCardSkeleton"
 
 const Monitors = () => {
     const {getMonitors,monitor,loading}=useMonitor();
-    const {token,load}=useToken()
+    const {token}=useToken()
      console.log(monitor,token)
   
 useEffect(()=>{

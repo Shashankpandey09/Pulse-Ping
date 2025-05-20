@@ -14,7 +14,7 @@ const AddMonitor = () => {
   });
    const { getToken } = useAuth(); 
    const navigate=useNavigate();
-const {addMonitors,loading}=useMonitor()
+const {addMonitors,buttonLoad,error}=useMonitor()
   const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setInput((prev) => ({
@@ -33,7 +33,7 @@ const {addMonitors,loading}=useMonitor()
     },2000)
    }
    else{
-    toast("error maximum monitor limit reached ")
+    toast(`error ${error}`)
    }
     setInput({ name: "", url: "", interval: 59 });
   };
@@ -107,12 +107,12 @@ const {addMonitors,loading}=useMonitor()
         <div className="flex justify-center pt-2">
         <button
   type="submit"
-  disabled={loading}
-  className={`flex items-center justify-center gap-2 bg-gradient-to-r from-white to-gray-200 text-black font-semibold px-6 py-3 rounded-xl shadow-xl transition-all ${
-    loading ? 'opacity-50 cursor-not-allowed' : 'hover:shadow-cyan-400/20'
+  disabled={buttonLoad}
+  className={`flex items-center justify-center cursor-pointer gap-2 bg-gradient-to-r from-white to-gray-200 text-black font-semibold px-6 py-3 rounded-xl shadow-xl transition-all ${
+    buttonLoad ? 'opacity-50 cursor-not-allowed' : 'hover:shadow-cyan-400/20'
   }`}
 >
-  {loading ? (
+  {buttonLoad ? (
     <>
       Adding
       <span className="h-4 w-4 border-2 border-t-transparent border-black rounded-full animate-spin"></span>

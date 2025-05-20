@@ -1,42 +1,32 @@
 import {create} from 'zustand'
 import axios from 'axios'
+import type { Monitor,history } from '../types/types'
 
- type Monitor={
-      name: string;
-    url: string;
-    interval: number;
-    userId: string;
-    id: number;
-    currentStatus: string | null;
-    createdAt: Date;
-    history:history[]
-}
 
-type history={
-     id: number;
-    monitorId: number;
-    lastStatus: string;
-    lastPing: Date;
-    responseTime: number | null;
-}
+ 
 type MonitorPost=Pick<Monitor,"name" | "url"| "interval">
 interface MonitorStoreState{
     loading:boolean,
     monitor:Monitor[]
-    error:string|null
+    error:string|null,
+    history:history[]
+    buttonLoad:boolean,
     getMonitors:(token:string|null)=>Promise<void>
     addMonitors:(payload:MonitorPost,token:string)=>Promise<Boolean>
+    getHistory:(token:string|null,id:number)=>Promise<void>
 }
 
 export const useMonitor=create<MonitorStoreState>((set,get)=>({
-    loading:false,
+    loading:true,
     monitor:[],
     error:null,
+    history:[],
+    buttonLoad:false,
     getMonitors:async(token)=>{
      try {
         if(!token) return;
-        set({loading:true,error:null})
-      
+       
+        set({loading:true});
          const url=import.meta.env.VITE_BACKEND_URL
          
         const resp=await axios.get(`${url}/monitor`,{
@@ -64,20 +54,38 @@ export const useMonitor=create<MonitorStoreState>((set,get)=>({
      try {
    
         
-        set({loading:true});
+        set({buttonLoad:true});
         await axios.post(`${import.meta.env.VITE_BACKEND_URL}/monitor/create`,payload,{
           headers:{
             "Content-Type":'application/json',
             "Authorization":`Bearer ${token}`
           }
         })
-        set({loading:false}) 
+        set({buttonLoad:false}) 
         await get().getMonitors(token)
         return true;
      } catch (error:any) {
         set({loading:false,error:error})
         console.log(error)
         return false;
+     }
+    },
+    getHistory:async(token,id)=>{
+     try {
+      if(!token) return;
+      const url=import.meta.env.VITE_BACKEND_URL
+      const resp=await axios.get(`${url}/monitor/history/${id}`,{
+        headers:{
+          "Content-Type":"application/json",
+          "Authorization":`Bearer ${token}`,
+           "ngrok-skip-browser-warning": "69420" 
+        }
+      })
+     set({loading:false,history:resp.data.message})
+     await get().getMonitors(token)
+     console.log(id,history,token,url)
+     } catch (error:any) {
+     set({loading:false,error:error.message})
      }
     }
 }))
