@@ -2,6 +2,7 @@ import { Monitor } from "@prisma/client";
 import { prisma } from "../lib/prisma";
 import axios from "axios";
 import { sendDownAlert } from "./SentDownEmail";
+import { checkUrl } from "./checkUrl";
 
 
 // create a function  to schedule the jobs and set and clear it
@@ -10,9 +11,7 @@ export const ScheduleJobs = async(monitors:Monitor[]) => {
   await Promise.all(
     monitors.map(async (monitor) => {
       try {
-        const startTime = Date.now();
-        const response = await axios.get(monitor.url, { timeout: 5000 });
-        const latency = Date.now() - startTime;
+     const response=await checkUrl(monitor.url)
   
         // Get previous status first
         const previousStatus = monitor.currentStatus;
@@ -21,23 +20,23 @@ export const ScheduleJobs = async(monitors:Monitor[]) => {
         const [history, updatedMonitor] = await prisma.$transaction([
           prisma.history.create({
             data: {
-              lastStatus: response.status >= 200 && response.status < 300 ? "UP" : "DOWN",
-              responseTime: latency,
+              lastStatus: response.status,
+              responseTime: response.responseTime,
               monitorId: monitor.id,
             },
           }),
           prisma.monitor.update({
             where: { id: monitor.id },
             data: {
-              currentStatus: response.status >= 200 && response.status < 300 ? "UP" : "DOWN",
+              currentStatus: response.status
             },
             include: { user: true }
           }),
         ]);
   
         // Alert only if status changed to DOWN
-        if (updatedMonitor.currentStatus !== previousStatus && 
-            updatedMonitor.currentStatus === "DOWN") {
+        if (updatedMonitor.currentStatus == previousStatus && 
+            updatedMonitor.currentStatus === "down") {
           await sendDownAlert(monitor.name, monitor.url, updatedMonitor.user.email);
         }
   
@@ -45,11 +44,11 @@ export const ScheduleJobs = async(monitors:Monitor[]) => {
         // Similar transaction for error case
         const [history, updatedMonitor] = await prisma.$transaction([
           prisma.history.create({
-            data: { lastStatus: "DOWN", monitorId: monitor.id },
+            data: { lastStatus: "down", monitorId: monitor.id },
           }),
           prisma.monitor.update({
             where: { id: monitor.id },
-            data: { currentStatus: "DOWN" },
+            data: { currentStatus: "down" },
             include: { user: true }
           }),
         ]);

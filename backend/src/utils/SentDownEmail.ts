@@ -16,7 +16,7 @@ const transporter = nodemailer.createTransport({
       from: process.env.EMAIL_USER,
       to: userEmail,       // admin or user email
       subject: `Alert: Monitor ${monitorName} is DOWN`,
-      text: `The monitor for URL ${url} is DOWN as of ${new Date().toISOString()}`,
+      text: `The monitor for URL ${url} is DOWN as of ${new Date().toLocaleDateString()}`,
     };
     try {
       await transporter.sendMail(mailOptions);

@@ -1,14 +1,8 @@
 import { Webhook } from "svix";
-import { RequestHandler } from "express";
+import { Request,Response,NextFunction } from "express";
 
-declare module "express" {
-  interface Request {
-    clerkPayload?: Record<string, any>;
-    rawBody?: Buffer;
-  }
-}
 
-export const clerkWebHook: RequestHandler = (req, res, next) => {
+export const clerkWebHook = (req:Request, res:Response, next:NextFunction) => {
   try {
     // Validate headers
     const svixId = req.headers["svix-id"];

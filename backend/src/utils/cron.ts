@@ -7,12 +7,12 @@ const cookieJar=new Map<number,{job:ScheduledTask,monitors:Monitor[]}>();
 export const addMonitorsTojar=(monitor:Monitor)=>{
 const jar=cookieJar.get(monitor.interval);
 if(jar){
-    //adding monitors to the jar
+    //adding monitors to the jar if the jar already exist 
     jar.monitors.push(monitor)
 }
 else{
     //creating a new jar with cron jobs
-    const cronExp=(monitor.interval==5)?`*/${monitor.interval} * * * *`:`* */${monitor.interval} * * *`;
+    const cronExp=`*/${monitor.interval} * * * *`;
     const job=nodeCron.schedule(cronExp,()=>{
      // get current jar
      const currentJar=cookieJar.get(monitor.interval)!;

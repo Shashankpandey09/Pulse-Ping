@@ -4,7 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "tsc --build && node dist/index.js",
+    "build": "tsc --build"
   },
   "keywords": [],
   "author": "",
@@ -19,7 +21,6 @@
     "cors": "^2.8.5",
     "dotenv": "^16.5.0",
     "express": "^5.1.0",
-    "ngrok": "^5.0.0-beta.2",
     "node-cron": "^3.0.3",
     "nodemailer": "^7.0.2",
     "prisma": "^6.7.0",
@@ -29,6 +30,7 @@
   "devDependencies": {
     "@types/cors": "^2.8.17",
     "@types/express": "^5.0.1",
-    "@types/nodemailer": "^6.4.17"
+    "@types/nodemailer": "^6.4.17",
+   "typescript": "^5.3.2"
   }
 }
