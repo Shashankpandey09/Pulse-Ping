@@ -2,7 +2,6 @@ import { Router } from "express";
 import { requireAuth, getAuth } from "@clerk/express";
 import { prisma } from "../lib/prisma";
 import { z } from "zod";
-import axios from "axios";
 import { addMonitorsTojar, removeCookiesFromJar } from "../utils/cron";
 import { checkUrl } from "../utils/checkUrl";
 
