@@ -28,14 +28,14 @@ const {addMonitors,buttonLoad,error}=useMonitor()
       const token=await getToken()
    const added= await addMonitors(inputValues,token as string)
    if(added){toast('Success')
-    setTimeout(()=>{
+   
   navigate('/Monitors')
-    },2000)
+
    }
    else{
     toast(`error ${error}`)
    }
-    setInput({ name: "", url: "", interval: 59 });
+  
   };
 
   return (
@@ -135,19 +135,7 @@ const {addMonitors,buttonLoad,error}=useMonitor()
         </ul>
       </div>
     </section>
-    <ToastContainer
-position="top-right"
-autoClose={5000}
-hideProgressBar={false}
-newestOnTop={false}
-closeOnClick={false}
-rtl={false}
-pauseOnFocusLoss
-draggable
-pauseOnHover
-theme="dark"
-transition={Bounce}
-/>
+   
     </div>
   );
 };

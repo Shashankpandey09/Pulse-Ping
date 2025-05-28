@@ -48,6 +48,7 @@ export const useMonitor=create<MonitorStoreState>((set,get)=>({
 
      } catch (error) {
         set({loading:false,error:(error) as string})
+        console.log(error)
      }
     },
     addMonitors:async(payload,token)=>{
@@ -65,7 +66,7 @@ export const useMonitor=create<MonitorStoreState>((set,get)=>({
         await get().getMonitors(token)
         return true;
      } catch (error:any) {
-        set({loading:false,error:error})
+        set({loading:false,error:error,buttonLoad:false})
         console.log(error)
         return false;
      }

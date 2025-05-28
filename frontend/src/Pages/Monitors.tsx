@@ -5,6 +5,7 @@ import Nav from "../Components/Nav"
 import Sidebar from "../Components/Sidebar"
 import { useToken } from "../hooks/getToken"
 import MonitorCardSkeleton from "../Components/MonitorCardSkeleton"
+import { ToastContainer,Bounce } from 'react-toastify';
 
 const Monitors = () => {
     const {getMonitors,monitor,loading}=useMonitor();
@@ -46,6 +47,19 @@ useEffect(()=>{
 )}
       
     </div>
+     <ToastContainer
+position="top-right"
+autoClose={5000}
+hideProgressBar={false}
+newestOnTop={false}
+closeOnClick={false}
+rtl={false}
+pauseOnFocusLoss
+draggable
+pauseOnHover
+theme="dark"
+transition={Bounce}
+/>
     </div>
   )
 }
