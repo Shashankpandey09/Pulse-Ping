@@ -13,7 +13,7 @@ interface MonitorStoreState{
     buttonLoad:boolean,
     getMonitors:(token:string|null)=>Promise<void>
     addMonitors:(payload:MonitorPost,token:string)=>Promise<Boolean>
-    getHistory:(token:string|null,id:number)=>Promise<void>
+    // getHistory:(token:string|null,id:number)=>Promise<void>
 }
 
 export const useMonitor=create<MonitorStoreState>((set,get)=>({
@@ -71,22 +71,22 @@ export const useMonitor=create<MonitorStoreState>((set,get)=>({
         return false;
      }
     },
-    getHistory:async(token,id)=>{
-     try {
-      if(!token) return;
-      const url=import.meta.env.VITE_BACKEND_URL
-      const resp=await axios.get(`${url}/monitor/history/${id}`,{
-        headers:{
-          "Content-Type":"application/json",
-          "Authorization":`Bearer ${token}`,
-           "ngrok-skip-browser-warning": "69420" 
-        }
-      })
-     set({loading:false,history:resp.data.message})
-     await get().getMonitors(token)
-     console.log(id,history,token,url)
-     } catch (error:any) {
-     set({loading:false,error:error.message})
-     }
-    }
+    // getHistory:async(token,id)=>{
+    //  try {
+    //   if(!token) return;
+    //   const url=import.meta.env.VITE_BACKEND_URL
+    //   const resp=await axios.get(`${url}/monitor/history/${id}`,{
+    //     headers:{
+    //       "Content-Type":"application/json",
+    //       "Authorization":`Bearer ${token}`,
+    //        "ngrok-skip-browser-warning": "69420" 
+    //     }
+    //   })
+    //  set({loading:false,history:resp.data.message})
+    //  await get().getMonitors(token)
+    //  console.log(id,history,token,url)
+    //  } catch (error:any) {
+    //  set({loading:false,error:error.message})
+    //  }
+    // }
 }))
