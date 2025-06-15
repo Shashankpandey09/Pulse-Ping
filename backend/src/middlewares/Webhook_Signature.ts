@@ -37,5 +37,6 @@ export const clerkWebHook = (req:Request, res:Response, next:NextFunction) => {
     console.error("Webhook verification failed:", error);
     const message = error instanceof Error ? error.message : "Unknown error";
     res.status(401).json({ error: `Invalid signature: ${message}` });
+    return
   }
 };

@@ -6,7 +6,7 @@ let socket: WebSocket | null = null;
 export function GetSocket(token: string|null) {
   if (!socket || socket.readyState === WebSocket.CLOSED) {
     socket = new WebSocket(`wss://3371-2405-201-600d-8101-c89c-7ff7-8830-899c.ngrok-free.app`);
-    wss://
+
     socket.onopen = () => {
       console.log("WebSocket connected");
       socket?.send(JSON.stringify({ token }));
